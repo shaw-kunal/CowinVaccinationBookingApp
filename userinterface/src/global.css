@@ -1,0 +1,82 @@
+.link{
+    text-decoration: none;
+}
+
+.link{
+text-decoration: none;
+outline: none;    
+    
+}
+:root{
+     --navbar-color: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+    --navbar-color:#225354;
+
+    --grey-color:rgb(79, 78, 78);
+    --grey-border-color:rgb(202, 194, 194);
+    --sideBar-color:#0941ba;
+    --primary-color :#4458dc;
+    --primary-color2:#800080;
+    --title-color :#141313;
+    --text-color :#1e1a1a;
+    --border-color :#201f1f17;
+     --gradient-color : linear-gradient(90deg,#4458dc 0% ,#612cca 100%);
+     --shadow-color :0px 10px 30px rgba(118, 85 ,225,0.3);
+     --box-shadow:0px 10px 30px rgba(57,56,61,0.205);
+     --roboto:cursive,'Roboto';
+     --heading-gradient : linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+     --text-background:linear-gradient(to right, #eaa65b, #f98d5a, #ff7267, #ff557e, #f93e9e, #d65ed0, #9b7cf2, #3a92ff, #00b3ff, #00cef5, #00e2d8, #89f2be);
+     --candidateHeading: linear-gradient(to right, #cfd9df 0%, #e2ebf01c 100%);
+     --singleCadidateBackground: #cfd9df;
+     --downloadBtn-color:#8e2a2a;
+     --downloadBtn-color-hover:#7e2c2c;
+ 
+ --yellow: #f5c32c;
+ --orange: #fca61f;
+ --black: #242d49;
+ --gray: rgba(36, 45, 73, 0.65);
+ --profileShadow: 0px 4px 17px 2px rgba(0, 0, 0, 0.25);
+ --hrColor: #cfcdcd;
+ --cardColor: rgba(255, 255, 255, 0.64);
+ --buttonBg: linear-gradient(98.63deg, #f9a225 0%, #f95f35 100%);
+ --buttonBgR: linear-gradient(-98.63deg, #f9a225 0%, #f95f35 100%);
+ --inputColor: rgba(40, 52, 62, 0.07);
+ --photo: #4CB256;
+ --video: #0109ff;
+ --location: #EF5757;
+--shedule: #E1AE4A;
+
+}
+.loginArrow{
+    color: var(--photo);
+    font-weight: 600px;
+    font-size: 40px;
+    box-shadow: rgba(28, 199, 208, 0.2) 0px 7px 29px 0px;
+
+}
+.IconNamepass{
+    color: var(--orange);
+    font-weight: 600px;
+    position: absolute;
+    left:1px;
+}
+
+.downArrow{
+    transform: all 1s ease;
+    position: absolute;
+    animation: arrow .8s infinite   ;
+    animation-direction:alternate-reverse;
+    top:0px;
+    left: 10px;
+}
+@keyframes arrow{
+    0%{
+        top:10px;
+        
+    }
+    100%{
+        top:-5px;
+    }
+    
+}
+
+

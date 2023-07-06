@@ -1,0 +1,37 @@
+@import "./../global.css";
+.inputLabelR{
+    position: absolute;
+    left: 0px;
+    bottom:8px;
+    background-color: none;
+    font-weight: 700;
+    font-size: large;
+    color: rgb(90, 89, 89);
+    padding: none;
+    margin: none;
+    cursor:text;
+    padding-left: 4px;
+    padding-right: 5px;
+    transition: top 200ms ease-in, left 200ms ease-in, font-size 200ms ease-in;
+    height: fit-content;
+    color:rgb(157, 154, 154);
+    font-weight:300;
+}
+.textBoxR:focus{
+    border: 2px solid var(--navbar-color);
+}
+
+/* .textBox:hover ~.inputLabel, */
+/* .inputLabel:hover, */
+.textBoxR:focus ~ .inputLabel,
+.textBoxR:not(:placeholder-shown).textBoxR:not(:focus) ~ .inputLabelR
+{   bottom:3px;
+    left:13px;
+    font-size: 15px;
+    background: white;
+    z-index: 2;
+    color: var(--orange);
+    font-weight: 500;
+}
+
+

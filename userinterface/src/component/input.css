@@ -1,0 +1,32 @@
+.inputLabel{
+    position: absolute;
+    left: 28px;
+    bottom:8px;
+    /* background-color: aqua; */
+    font-weight: 700;
+    font-size: large;
+    color: rgb(90, 89, 89);
+    padding: none;
+    margin: none;
+    cursor:text;
+    padding-left: 4px;
+    padding-right: 5px;
+    transition: top 200ms ease-in, left 200ms ease-in, font-size 200ms ease-in;
+    height: fit-content;
+}
+
+.textBox:focus ~ .inputLabel,
+.textBox:not(:placeholder-shown).textBox:not(:focus) ~ .inputLabel
+{   top:-13px;
+    left:20px;
+    font-size: 15px;
+    background: rgb(255, 255, 255);
+    z-index: 2;
+    color: #1cc7d0;
+
+
+    
+    
+}
+
+
