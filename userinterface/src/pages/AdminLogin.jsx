@@ -105,10 +105,12 @@ const AdminLogin = () => {
                         placeholder='password'
                         onChange={e => setPassword(e.target.value)}></Input>
                 </Item>
+
                 <Button onClick={handleClick}>Login</Button>
+               <p>username:aniket && password:aniket</p>
                 {
-                                    error && <Error>Something went wrong</Error>
-                                }
+                    error && <Error>Something went wrong</Error>
+                 }
             </ContainerWrapper>
 
         </Container>

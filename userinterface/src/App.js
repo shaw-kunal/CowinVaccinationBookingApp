@@ -31,8 +31,6 @@ const App = () => {
   else if(person != null)
     user = true;
     
-
-
   return (
 
     <BrowserRouter>
