@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import Logo from './../images/arogyasetu.jpg'
 import LoginIcon from '@mui/icons-material/Login';
@@ -6,6 +6,9 @@ import { ArrowForward, LockOpen, Person } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import "./../cssDesign/input.css"
 import Navbar from '../component/Navbar';
+import { login } from '../redux/apiCalls';
+import { useDispatch, useSelector } from "react-redux"
+
 
 
 const Container = styled.div`
@@ -42,7 +45,6 @@ align-items:center;
 justify-content: center;
 position: relative;
 border-radius: 4px;
-
 `
 
 const LogoImg = styled.img`
@@ -51,7 +53,6 @@ height: 70px;
 border-radius: 50%;
 position: absolute;
 top:15px;
-
 `
 
 
@@ -136,19 +137,38 @@ transition: width 0.2s ease-in;
 
 &:hover{
     background-image: linear-gradient(-120deg, #f6d365 0%, #fda085 100%);    width: 150px; 
-
+}
+&:disabled{
+    color:green;
+    cursor: not-allowed;
 }
 `
 const NoAccount = styled.p``
 
+const Error = styled.span`
+color: red;
+`
+
 const Login = () => {
+
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const dispatch = useDispatch();
+    const { isFetching, error } = useSelector((state) => state.user);
+
+    const handleClick = (e) => {
+        e.preventDefault();
+        login(dispatch, { username, password })
+
+
+    }
     return (
-        
+
         <Container>
-        <Navbar/>
-        <div className="blur" style={{top:'-18%',right:'0'}}></div>
-       <div className="blur" style={{top:'36%',left:'-10%'}}></div>
-  
+            <Navbar />
+            <div className="blur" style={{ top: '-18%', right: '0' }}></div>
+            <div className="blur" style={{ top: '36%', left: '-10%' }}></div>
+
             <InnerContainer>
                 <Upper>
                     <LogoImg src={Logo}></LogoImg>
@@ -162,19 +182,27 @@ const Login = () => {
                         <Items>
                             <InputItem >
                                 <Person className='IconNamepass' />
-                                <Input  className='textBox' placeholder=" " ></Input>
+                                <Input className='textBox' placeholder=" "
+                                    onChange={e => setUsername(e.target.value)}
+                                ></Input>
                                 <label className='inputLabel'>UserName</label>
                             </InputItem>
                             <InputItem>
                                 <LockOpen className='IconNamepass' />
-                                <Input className='textBox' type='password' placeholder=' '></Input>
+                                <Input className='textBox' type='password' placeholder=' '
+                                    onChange={e => setPassword(e.target.value)}
+
+                                ></Input>
                                 <label className='inputLabel'>Password</label>
                             </InputItem>
                             <InputItem>
-                                <LoginBtn>
+                                <LoginBtn onClick={handleClick} disabled={isFetching}>
                                     Login
                                     <ArrowForward />
                                 </LoginBtn>
+                                {
+                                    error && <Error>Something went wrong</Error>
+                                }
                             </InputItem>
                         </Items>
                         <Link to="/register"><NoAccount>Did't have Account? Create Account</NoAccount></Link>

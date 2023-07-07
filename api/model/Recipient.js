@@ -24,11 +24,11 @@ const RecipientSchema = new mongoose.Schema({
     ,
     vaccine:{
         type:String,
-        required:true
+
     },
     DoseNo:{
         type:String,
-        required:true
+        
     },
     CenterId:{
         type:String

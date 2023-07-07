@@ -42,9 +42,20 @@ export const getCenter = async(req,res,next)=>{
 }
 // get all Center 
 export const getAllCenter = async(req,res,next)=>{
-    try {
-        const centers = await Center.find();
-        res.status(200).json(centers);
+
+ try {
+  if(req.query!= null)
+  {    
+    const centers= await Center.find(req.query);
+    res.status(200).json(centers);
+  }
+  else{
+    const FethcData = await Center.find();
+    console.log(FethcData)
+    res.status(200).json(FethcData);
+
+  }
+        
     } catch (error) {
         next(error);  
     }

@@ -1,9 +1,10 @@
 import { Label } from '@mui/icons-material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from "styled-components"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { publicRequest, userRequest } from '../requestMethod'
 
 const Container = styled.div`
 margin-top: 100px;
@@ -100,20 +101,61 @@ transition: all 1s ease;
 }
 
 `
+const Error = styled.span`
+color:red;
+
+`
 
 
 const VaccineRegister = () => {
-
-  const [search, setSearch] = useState(true);
-const [selectedDate, setSelectedDate] = useState(new Date())
+  const [name, setName] = useState('')
+  const [Dob, setDob] = useState('')
+  const [phone, setPhone] = useState("")
+  const [aadhar, setAadhar] = useState("")
   const [gender, setGender] = useState("male")
-  const  handleGender = (gender) => {
-    setGender( gender );
+  const [error, setError] = useState(false);
+  const [success,setSuccess] =useState(false)
+  const [id,setId] = useState(null)
+
+
+  const navigate = useNavigate();
+
+  const handleGender = (gender) => {
+    setGender(gender);
   };
+
+  const handleClick = async (e) => {
+    setError(false)
+    e.preventDefault();
+    try {
+      const res = await  userRequest.post("/recipient/", { name, Dob, phone, aadhar, gender });
+    console.log(res);
+      setId(res.data._id)
+      alert("success fully register");
+      setSuccess(true);
+    } catch (error) {
+      setSuccess(false);
+      setError(error);
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+
+    setTimeout(() => {
+      if(success == true)
+      {
+        console.log("recipent id"+ id)
+        navigate("/schedule",{state:{id:id}})
+      }
+    }, 2000);
+  
+  }, [success])
+  
 
 
   return (
-    
+
     <Container>
       <ContainerWrapper>
         <Header>
@@ -124,43 +166,59 @@ const [selectedDate, setSelectedDate] = useState(new Date())
         <Form>
           <Item>
             <Lable htmlFor='name'>Name:</Lable>
-            <Input type='text' name='name' placeholder='Enter your Name'></Input>
+            <Input
+              type='text'
+              name='name'
+              placeholder='Enter your Name'
+              onChange={e => setName(e.target.value)}
+            ></Input>
           </Item>
           <Item>
             <Lable htmlFor='year'>Year of Birth:</Lable>
-            <Input type="number" name='year' min="1900" max="2099" placeholder='Enter Year'></Input>
+            <Input
+              type="String"
+              name='year'
+              min="1900" max="2099"
+              placeholder='Enter Year'
+              onChange={e => setDob(e.target.value)}
+
+            ></Input>
           </Item>
           <Item>
             <Lable htmlFor='aadhar'>Aadhar no:</Lable>
-            <Input type='text' name='number' pattern="[0-9]{12}" maxlength="12" placeholder='Enter your addhar No'></Input>
+            <Input onChange={e => setAadhar(e.target.value)}
+              type='text' name='number' pattern="[0-9]{12}" maxlength="12" placeholder='Enter your addhar No'></Input>
           </Item>
           <Item>
             <Lable htmlFor='phone'>Phone Number:</Lable>
-            <Input type='tel' name='phone' placeholder='Enter your Phone Number'  pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required></Input>
+            <Input onChange={e => setPhone(e.target.value)}
+              type='tel' name='phone' placeholder='Enter your Phone Number' pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required></Input>
           </Item>
           <Item>
             <Lable>Gender:</Lable>
             <GenderButton
-            clicked={gender=== "male"}
-             onClick={()=>handleGender('male')}
+              clicked={gender === "male"}
+              onClick={() => handleGender('male')}
             >
               Male
             </GenderButton>
             <GenderButton
-            clicked={gender==='female'}
-             onClick={()=>handleGender('female')}
+              clicked={gender === 'female'}
+              onClick={() => handleGender('female')}
             >Female</GenderButton>
             <GenderButton
-             clicked={gender==='other'}
-             onClick={()=>handleGender('other')}
+              clicked={gender === 'other'}
+              onClick={() => handleGender('other')}
             >Other</GenderButton>
-          
-          </Item>
-        
-        <Link className='link' to="/schedule">
-          <ButtonRegister>Register For Vaccine</ButtonRegister>
-        </Link>
 
+          </Item>
+
+          <Link className='link' to="/schedule">
+            <ButtonRegister onClick={handleClick}>Register For Vaccine</ButtonRegister>
+          </Link>
+          {
+            error && <Error>Something went wrong! Enter valid Crediential</Error>
+          }
         </Form>
 
       </ContainerWrapper>

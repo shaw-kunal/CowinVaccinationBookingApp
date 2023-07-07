@@ -1,8 +1,10 @@
 import styled from "styled-components"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./../global.css"
 import Logo from "./../images/arogyasetu.jpg"
 import {Avatar} from "@mui/material"
+import { logout } from "../redux/userRedux";
+import { useDispatch } from "react-redux";
 
 
 const Container = styled.div`
@@ -90,6 +92,16 @@ cursor: pointer;
 
 
 const Navbar = ({balnk}) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+    
+    const handleLogout = (e) => 
+    {
+        dispatch(logout());
+    }
+
+  
   return (
     <Container>
       <Wrapper>
@@ -108,8 +120,9 @@ const Navbar = ({balnk}) => {
             }
         </Center>
        { balnk && <Right>
-          <Link className="link" to="/login"><Rightitem>User</Rightitem></Link>
+          <Link className="link" to="/login"><Rightitem>Login</Rightitem></Link>
           <Link className="link" to="/admin"><Rightitem>Admin</Rightitem></Link>
+          <Link className="link" to="/login" onClick={handleLogout}><Rightitem>Logout</Rightitem></Link>
         <Profile>  <Avatar src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"></Avatar></Profile>
         </Right>
        }

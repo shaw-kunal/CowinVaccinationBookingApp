@@ -1,15 +1,18 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { init } from 'ityped'
 import background from "./../images/docteor.png"
 import "./../global.css"
 import Navbar from '../component/Navbar'
+import { publicRequest } from '../requestMethod'
+import {useNavigate} from "react-router-dom"
 
 
 const Container = styled.div`
 flex-direction: column;
 background-color: aliceblue;
+height: 100vh;
 `
 const Heading = styled.div`
 font-size: 30px;
@@ -76,6 +79,7 @@ width:300px;
 display: flex;
 flex-direction: column;
 position: relative;
+
 `
 const FormLabel = styled.label`
 margin-bottom: 10px;
@@ -97,16 +101,6 @@ const FormInput = styled.input`
    outline: none;
                 }         
 `
-const RadioItem = styled.div`
-width: 100%;
-`
-const RadioGroup = styled.div`
-display:flex;
-gap: 10px;
-`
-
-const Lable = styled.p`
-margin-right:15px;`
 
 const RegisterBtn = styled.button`
 background-color: #1cc7d0;
@@ -124,6 +118,7 @@ justify-content: center;
 background-image: var(--buttonBg);
 gap:10px;
 transition: width 0.2s ease-in;
+margin-top: 35px;
 
 &:hover{
   background-image: var(--buttonBgR);
@@ -131,7 +126,25 @@ transition: width 0.2s ease-in;
 
 }
 `
+const Error = styled.p`
+padding: 10px;
+color: red;
+background-color: yellow;
+
+` 
+
 const Registration = () => {
+
+const [username, setUsername] = useState('')
+const [email, setEmail] = useState('')
+const [phone, setPhone] = useState('')
+const [addharNo, setAadharNo] = useState('')
+const [password,setPassword] = useState('')
+const [error, setError] = useState(false);
+const [response,setResponse] =useState('')
+const navigate = useNavigate(); // Initialize the useNavigate hook
+
+
   const textRef = useRef();
   useEffect(() => {
     console.log(textRef)
@@ -150,10 +163,31 @@ const Registration = () => {
 
   }, [])
 
+  // handle submit
+
+  const hadleSubmit = async (e)=>{
+    e.preventDefault();
+  try {
+    const res = await publicRequest.post('/auth/register',{username,email,phone,addharNo,password})
+    setError(false)
+    console.log(res)
+    setResponse(res);
+    window.alert("you are successfully register")
+    console.log("successfully regsiter")
+    navigate("/login")
+  } catch (error) {
+    setError(true);
+     console.log(error.message)
+  }
+  }
+
   return (
+
+
+
+
     <Container>
     <Navbar balnk={false}/>
-
       <MainContainer>
         <MainInnerContainer>
           <LeftContainer>
@@ -167,40 +201,62 @@ const Registration = () => {
             <StyledForm>
               <FormItem>
                 <FormLabel htmlFor='username'>User Name</FormLabel>
-                <FormInput  type='text' name="username" placeholder='Full name' />
+                <FormInput 
+                 type='text'
+                  name="username" 
+                  placeholder='Full name' 
+                  onChange={e=>setUsername(e.target.value)}
+                  required
+                  />
               </FormItem>
               <FormItem>
                 <FormLabel htmlFor='Email'>Email</FormLabel>
-                <FormInput className='textBoxR' type='Email' name="email" placeholder='Email ' />
+                <FormInput 
+                className='textBoxR' 
+                type='Email' name="email"
+                 placeholder='Email'
+                 onChange={e=>setEmail(e.target.value)}
+                  required />
 
               </FormItem>
               <FormItem>
                 <FormLabel htmlFor='Phone'>Phone Number</FormLabel>
-                <FormInput className='textBoxR' type='text' name="phone" placeholder=' Phone Number' />
+                <FormInput 
+                className='textBoxR' 
+                type='tel' 
+                name="phone" 
+                placeholder=' Phone Number'
+                onChange={e=>setPhone(e.target.value)}
+                 required/>
 
               </FormItem>
               <FormItem>
-                <FormLabel htmlFor='addhar'>Addhar No:</FormLabel>
-                <FormInput className='textBox' type='text' name="addhar" placeholder='Addhar Number' />
+                <FormLabel htmlFor='aadhar'>Aadhar No:</FormLabel>
+                <FormInput 
+                className='textBox'
+                 type='text' name="aadhar" 
+                 placeholder='Addhar Number'
+                 onChange={e=>setAadharNo(e.target.value)}
+                  required/>
 
               </FormItem>
               <FormItem>
                 <FormLabel htmlFor='Password'>Password</FormLabel>
-                <FormInput className='textBoxR' type='text' name="Password" placeholder=' ' />
+                <FormInput 
+                className='textBoxR'
+                 type='text' name="Password"
+                  placeholder='password'
+                  onChange={e=>setPassword(e.target.value)}
+                   required />
                 {/* <label className='inputLabelR' >Password</label> */}
               </FormItem>
+              <FormItem>
+            <RegisterBtn onClick={hadleSubmit}>Register</RegisterBtn> 
+           </FormItem>
 
-
-              <RadioItem>
-                <FormLabel htmlFor='Gender'>Gender</FormLabel>
-                <RadioGroup>
-                  <FormInput type='radio' name='male' /><Lable>Male</Lable>
-                  <FormInput type='radio' name='female' /><Lable>Female</Lable>
-                  <FormInput type='radio' name='other' /><Lable>Other</Lable>
-                  <FormInput type='radio' name='notspecify' /><Lable>Prefer Not to say</Lable>
-                </RadioGroup>
-              </RadioItem>
-              <Link className="link" to="/login"><RegisterBtn>Register</RegisterBtn></Link>
+              {
+                error ?<Error>somthing went woring Try with Different username and Password</Error> : <p>{response.data}</p>
+              }
             </StyledForm>
 
 

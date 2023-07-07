@@ -1,14 +1,15 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Navbar from '../component/Navbar'
 import "./../global.css"
 import {  ArrowLeftOutlined, Delete } from '@mui/icons-material'
 import { Avatar } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 import Stack from '@mui/material/Stack';
+import { publicRequest } from '../requestMethod'
 
 
 const Container = styled.div`
@@ -91,7 +92,12 @@ font-size: 20px;
 cursor: pointer;
 `
 
+
 const Details = () => {
+  const location = useLocation();
+  const [data, setData] = useState("")
+
+  
   return (
     <Container>
       <Navbar balnk={true} />
@@ -103,11 +109,11 @@ const Details = () => {
         <Items>
           <Item>
             <Title style={{ "color": "red" }}>Ref ID</Title>
-            <Value>68956313463</Value>
+            <Value>64a804f7f5fa91718892e95d</Value>
           </Item>
           <Item>
             <Title style={{ "color": "red" }}>Secret Code</Title>
-            <Value>3463</Value>
+            <Value>2e95d</Value>
           </Item>
           <Item>
             <Title style={{ "color": "green" }}>aadhar ID</Title>

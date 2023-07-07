@@ -16,6 +16,10 @@ const CenterSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    cost:{
+        type:String,
+        
+    },
    capacity:{
     type: Number,
     required: true

@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from "styled-components"
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
+import { useDispatch,useSelector } from 'react-redux';
+import { login } from '../redux/apiCalls';
 
 
 const Container = styled.div`
@@ -69,21 +71,44 @@ const Button = styled.button`
             // background: linear-gradient(90deg, rgb(63, 63, 223) 35%, rgba(2, 168, 226, 1) 86%, rgba(0, 212, 255, 1) 100%);
             background: linear-gradient(90deg, #0072ff 0%, #00d4ff 100%);
       `
+      
+const Error = styled.span`
+color: red;
+`
+
 
 const AdminLogin = () => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const dispatch = useDispatch();
+    const { isFetching, error } = useSelector((state) => state.user);
+
+
+    const handleClick = (e) => {
+        e.preventDefault();
+        login(dispatch, { username, password })
+    }
+
     return (
         <Container>
             <ContainerWrapper>
                 <Title>Login To Your Account</Title>
                 <Item>
-                    <Label><PersonIcon  style={{"color":"#00d4ff", "marginRight":"10px"}}></PersonIcon>UserName</Label>
-                    <Input></Input>
+                    <Label><PersonIcon style={{ "color": "#00d4ff", "marginRight": "10px" }}></PersonIcon>UserName</Label>
+                    <Input type="text"
+                        placeholder='userName'
+                        onChange={e => setUsername(e.target.value)} ></Input>
                 </Item>
                 <Item>
-                    <Label><LockIcon style={{"color":"#00d4ff", "marginRight":"10px"}} />Password</Label>
-                    <Input></Input>
+                    <Label><LockIcon style={{ "color": "#00d4ff", "marginRight": "10px" }} />Password</Label>
+                    <Input type="password"
+                        placeholder='password'
+                        onChange={e => setPassword(e.target.value)}></Input>
                 </Item>
-                <Button>Login</Button>
+                <Button onClick={handleClick}>Login</Button>
+                {
+                                    error && <Error>Something went wrong</Error>
+                                }
             </ContainerWrapper>
 
         </Container>

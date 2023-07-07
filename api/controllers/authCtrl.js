@@ -41,8 +41,8 @@ export const login = async (req, res, next) => {
             isAdmin: user.isAdmin
         }, process.env.JWT);
 
-        const {password,isAdmin, ...other} = user._doc;
-        res.cookie("access_token",token,{httpOnly:true}).status(200).json({...other});
+        const {password, ...other} = user._doc;
+        res.status(200).json({...other,token});
         console.log('login successfully');
     } catch (error) {
         next(error)
