@@ -63,7 +63,7 @@ font-weight: 500;
 font-size: large;
 `
 const Input = styled.input`
-width:80%;
+width:70%;
 border: none;
   outline: none;
   border-bottom: 1.5px solid var(--orange); 
@@ -82,37 +82,6 @@ const GenderButton = styled.button`
 `
 
 
-
-
-const StyledSelect = styled.select`
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
-  color: var(--orange);
-`;
-
-const StyledOption = styled.option`
-  background-color: #f9f9f9;
-  color: var(--orange);
-`
-const Date1= styled.div`
-display: flex;
-align-items: center;
-justify-content: center;
-gap:30px;
-width: 100%;
-`
-
-const Button = styled.button`
-margin-right: 20px;
-border: none;
-padding: 3px 6px;
-border-radius: 4px;
-background-color: ${({ clicked }) => (clicked ? 'var(--orange)' : '#ccc')};
-  color: ${({ clicked }) => (clicked ? '#fff' : '#000')};
-`
 
 const ButtonRegister = styled.button`
 margin-right: 20px;
@@ -158,12 +127,16 @@ const [selectedDate, setSelectedDate] = useState(new Date())
             <Input type='text' name='name' placeholder='Enter your Name'></Input>
           </Item>
           <Item>
-            <Lable htmlFor='yob'>Year of Birth:</Lable>
-            <Input type="text" name='yob' placeholder='Enter your Name'></Input>
+            <Lable htmlFor='year'>Year of Birth:</Lable>
+            <Input type="number" name='year' min="1900" max="2099" placeholder='Enter Year'></Input>
           </Item>
           <Item>
-            <Lable htmlFor='addhar'>Addhar no:</Lable>
-            <Input type='text' name='addhar' placeholder='Enter your addhar No'></Input>
+            <Lable htmlFor='aadhar'>Aadhar no:</Lable>
+            <Input type='text' name='number' pattern="[0-9]{12}" maxlength="12" placeholder='Enter your addhar No'></Input>
+          </Item>
+          <Item>
+            <Lable htmlFor='phone'>Phone Number:</Lable>
+            <Input type='tel' name='phone' placeholder='Enter your Phone Number'  pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required></Input>
           </Item>
           <Item>
             <Lable>Gender:</Lable>
@@ -183,72 +156,9 @@ const [selectedDate, setSelectedDate] = useState(new Date())
             >Other</GenderButton>
           
           </Item>
-          <Item>
-          <div>
-          <Lable>Dose:</Lable>
-          <StyledSelect>
-          <StyledOption value="Dose1">Dose 1</StyledOption>
-          <StyledOption value="Dose2">Dose 2</StyledOption>
-          <StyledOption value="Booster">Booster Dose</StyledOption>
-        </StyledSelect>
-      </div>
-          <div>
-          <Lable>vaccine:</Lable>
-          <StyledSelect>
-          <StyledOption value="Covishield">Covishield</StyledOption>
-          <StyledOption value="Covaxin">Covaxin</StyledOption>
-          <StyledOption value="Gemovac">Gemovac</StyledOption>
-       
-        </StyledSelect>
-      </div>
-          <div>
-          <Lable>Cost:</Lable>
-          <StyledSelect>
-          <StyledOption value="Free">Free</StyledOption>
-          <StyledOption value="Paid">paid</StyledOption>       
-        </StyledSelect>
-      </div>
-          </Item>
-          <Date1>
-          <Lable>Sehdule your Date:</Lable>
-          <Item>
-            <DatePicker 
-             selected={selectedDate}
-             onChange={date=>setSelectedDate(date)}
-             dateFormat='dd/MM/yyyy'
-             minDate={new Date()}
-             isClearable
-             />
-          </Item>
-        </Date1>
-
-        <Item>
-        <div>
-       <Button
-      clicked={search === true}
-      onClick={()=>setSearch(true)}
-       >Search By PinCode</Button>
-       <Button
-      onClick={()=>setSearch(false)}
-        clicked={search=== false}
-      >search By District</Button>
-       </div>
-        </Item>
-        {
-          search ?
-        <Item>
-        <Input type="text" name='PinCode' placeholder='Enter your Pincode'></Input>
-        </Item>
-        :
-
-        <Item>
-        <Input type="text" name='State' placeholder='Enter your State'></Input>
-        <Input type="text" name='District' placeholder='Enter your District'></Input>
-        </Item>
-        }
         
-        <Link className='link' to="/Details">
-          <ButtonRegister>Register And Shecdule For Vaccine</ButtonRegister>
+        <Link className='link' to="/schedule">
+          <ButtonRegister>Register For Vaccine</ButtonRegister>
         </Link>
 
         </Form>

@@ -109,7 +109,7 @@ const Navbar = ({balnk}) => {
         </Center>
        { balnk && <Right>
           <Link className="link" to="/login"><Rightitem>User</Rightitem></Link>
-          <Link className="link" to="/"><Rightitem>Admin</Rightitem></Link>
+          <Link className="link" to="/admin"><Rightitem>Admin</Rightitem></Link>
         <Profile>  <Avatar src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"></Avatar></Profile>
         </Right>
        }

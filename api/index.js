@@ -6,6 +6,7 @@ import  cookieParser from "cookie-parser"
 import authRoute from "./routes/auth.js"
 import userRoute from "./routes/user.js"
 import centerRoute from "./routes/center.js"
+import recipientRoute from "./routes/recipient.js"
 
 const app = express()
 dotenv.config();
@@ -39,6 +40,7 @@ app.use(cookieParser())
 app.use("/api/auth", authRoute)
 app.use("/api/user",userRoute)
 app.use("/api/center",centerRoute)
+app.use("/api/recipient",recipientRoute)
 
 
 // handling the error
