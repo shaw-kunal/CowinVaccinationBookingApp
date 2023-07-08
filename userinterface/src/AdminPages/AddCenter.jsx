@@ -101,10 +101,10 @@ const AddCenter = () => {
                         <Item>
                             {
                                 (cost != "Free") &&
-                                    <Label>WorkingHr</Label>
+                                <>      <Label>WorkingHr</Label>
                                     <Input></Input>
 
-
+                                </>
                             }
                         </Item>
 
