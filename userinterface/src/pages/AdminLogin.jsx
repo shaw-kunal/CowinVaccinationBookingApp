@@ -107,14 +107,16 @@ const AdminLogin = () => {
                 </Item>
 
                 <Button onClick={handleClick}>Login</Button>
-               <p>username:aniket && password:aniket</p>
+               <p>username:admin && password:admin</p>
                 {
                     error && <Error>Something went wrong</Error>
                  }
             </ContainerWrapper>
-
         </Container>
     )
 }
 
 export default AdminLogin
+
+
+

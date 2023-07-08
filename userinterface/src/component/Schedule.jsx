@@ -1,5 +1,5 @@
-import { Label } from '@mui/icons-material'
-import React, { useState } from 'react'
+import { ArrowLeftOutlined, Label } from '@mui/icons-material'
+import React, { useEffect, useState } from 'react'
 import styled from "styled-components"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
@@ -15,6 +15,7 @@ align-items: center;
 justify-content: center;
 `
 const ContainerWrapper = styled.div`
+height: inherit;
 width: 50%;
 min-width: 600px;
 box-shadow: rgba(252, 167, 31, 0.304) 0px 4px 16px, rgba(222, 129, 23, 0.05) 0px 8px 32px;
@@ -25,6 +26,8 @@ flex-direction: column;
 gap:10px;
 padding: 50px;
 border-radius: 15px;
+position: relative;
+
 `
 const Header = styled.div`
 display: flex;
@@ -157,7 +160,23 @@ color:white;
 transition: all 1s ease;
 `
 
-
+const Error = styled.p`
+color: red;
+`
+const Buttonback = styled.button`
+border: 2px solid white;
+background-color: var(--orange);
+color: white;
+padding: 5px 20px;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 40px;
+font-size: 20px;
+cursor: pointer;
+position: absolute;
+left:-120px;
+`
 
 
 
@@ -174,16 +193,20 @@ const Schedule = () => {
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [data, setData] = useState([]);
   const [error, setError] = useState(false)
-  const [vaccine, setVaccine] = useState('')
-  const [DoseNo, setDose] = useState("")
-  const [Datev, setDatev] = useState("")
+  const [vaccine, setVaccine] = useState('Covishield')
+  const [DoseNo, setDose] = useState("Dose 1")
+  const [errorMessage, setErrorMessage] = useState("")
+  const [success, setSuccess] = useState(false)
+  const [updatedRecipient, setUpdateRecipient] = useState();
 
   const location = useLocation();
   const navigate = useNavigate();
-  const userid = location.state.id;
+
+
 
 
   const handleClick = async (e) => {
+
     setError(false);
     e.preventDefault();
     setData([])
@@ -192,26 +215,26 @@ const Schedule = () => {
 
         // that is search by pincode
         console.log("search by pin")
-        const res = await userRequest.get(`/center?pincode=${PinCode}`)
+        const res = await userRequest.get(`/center?pincode=${PinCode}&cost=${cost}`)
         console.log(res.data)
         if (res != null)
           setData(res.data);
       }
       else {
         let res;
-
-
         console.log("search by Distrct")
         // that is search by district
         if (District != "" && city != "")
-          res = await publicRequest.get(`/center?district=${District}&city=${city}`)
+          res = await publicRequest.get(`/center?district=${District}&city=${city}&cost=${cost}`)
         else if (District != "" && city == "")
           res = await userRequest.get(`/center?district=${District}&cost=${cost}`)
         else if (District == "" && city != "")
-          res = await userRequest.get(`/center?city=${city}&&cost=${cost}`)
-        if (res != null)
+          res = await userRequest.get(`/center?city=${city}&cost=${cost}`)
+        if (res.data != null)
           setData(res.data);
       }
+
+
       console.log(data + " " + data.length)
     } catch (error) {
       setError(true)
@@ -221,19 +244,44 @@ const Schedule = () => {
   }
 
   const handleSchule = async (id) => {
-    try {
-      console.log(userid)
-       console.log(id)
-      // await publicRequest.put(`/recipient/${userid}`, `{ CenterId:${id} ,vaccine:${vaccine}, DoseNo:${DoseNo}}`)
-      //  await publicRequest.post() 
-      // console.log("now naviagate")
-      navigate("/Details");
+    const userid = location.state.id;
+    const useraadhar = location.state.aadhar
 
+    setError(false);
+    try {
+
+      // first check is any user exist with these addhar no and have take dose1
+      const alreadyReg = await publicRequest.get(`/recipient?aadhar=${useraadhar}&DoseNo=${DoseNo}`)
+      console.log(alreadyReg)
+      if (alreadyReg.data.length != 0) {
+        setErrorMessage("You Are Already Take This Dose");
+        setError(true)
+      }
+      else {
+        const updatedData = {
+          CenterId: `${id}`,
+          vaccine: `${vaccine}`,
+          DoseNo: `${DoseNo}`,
+          cost: `${cost}`,
+          DateOfVaccination: `${selectedDate.getTime()}`
+        }
+
+        const updateRecipient = await publicRequest.put(`/recipient/${userid}`, updatedData);
+        console.log(updateRecipient)
+        setUpdateRecipient(updateRecipient)
+        alert("All set! succesfully schedule Your Appointment")
+        setSuccess(true);
+      }
 
     } catch (error) {
 
     }
   }
+
+  useEffect(() => {
+    if (success == true)
+      navigate("/Details", { state: {user: updatedRecipient.data} })
+  }, [success])
 
 
 
@@ -242,6 +290,9 @@ const Schedule = () => {
       <Navbar balnk={true} />
       <ContainerWrapper>
         <Header>
+          <Link to="/">
+            <Buttonback> <ArrowLeftOutlined />Back</Buttonback>
+          </Link>
           <Title><Label></Label>  Schedule Your Vaccination</Title>
         </Header>
         <Form>
@@ -267,9 +318,9 @@ const Schedule = () => {
             </div>
             <div>
               <Lable>Cost:</Lable>
-              <StyledSelect>
-                <StyledOption onClick={() => setCost("Free")} value="Free">Free</StyledOption>
-                <StyledOption value="Paid" onClick={() => setCost("Paid")}>Paid</StyledOption>
+              <StyledSelect onChange={e => setCost(e.target.value)}>
+                <StyledOption value="Free">Free</StyledOption>
+                <StyledOption value="Paid">Paid</StyledOption>
               </StyledSelect>
             </div>
           </Item>
@@ -327,11 +378,12 @@ const Schedule = () => {
           <Link className='link' to="/Details">
             <ButtonRegister onClick={handleClick}>Search</ButtonRegister>
           </Link>
+          {error && <Error>{errorMessage}</Error>}
         </Form>
 
         <ResultContainer>
           {
-            (data.length !== 0) && data.map((d, i) => (<Result key={i}>
+            (data.length !== 0) ? data.map((d, i) => (<Result key={i}>
               <RItem>
                 <Name>Center:</Name>
                 <Value> {d.name}</Value>
@@ -346,7 +398,7 @@ const Schedule = () => {
               </RItem>
               <RItem>
                 <Name>Price:</Name>
-                <Value> {d.Price}</Value>
+                <Value> {d.price}</Value>
               </RItem>
               <RItem>
                 <Name>landmark:</Name>
@@ -357,7 +409,7 @@ const Schedule = () => {
                 <Value> {d.workingHr}</Value>
               </RItem>
               <Sechedule onClick={() => handleSchule(d._id)}>Schedule Your Vaccination</Sechedule>
-            </Result>))
+            </Result>)) : <p>Noting To Show</p>
           }
         </ResultContainer>
       </ContainerWrapper>

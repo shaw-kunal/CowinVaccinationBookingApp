@@ -11,25 +11,26 @@ import AdminHome from './AdminPages/AdminHome';
 import SingleCenter from './AdminPages/SingleCenter/SingleCenter';
 import { useSelector } from 'react-redux';
 import NotValidUser from './component/NotValidUser';
+import AddCenter from './AdminPages/AddCenter';
 
 
 
 const App = () => {
-  
-  
-
   const person = useSelector(state=>state.user.currentUser)
   console.log(person);
   let admin = false;
   let user =false;
-  // console.log(person.isAdmin)
   if(person != null && person.isAdmin)
   {
+    alert("login as Admin")
+    console.log(person.isAdmin)
     admin = true;
   }
-  
   else if(person != null)
+  {
+    alert("login as User")
     user = true;
+  }
     
   return (
 
@@ -43,6 +44,7 @@ const App = () => {
        {/* admin page */}
         <Route path='/admin' element={admin ?<AdminHome/>:<AdminLogin/>} />
         <Route path="/home" element ={  <AdminHome/>}/>
+        <Route path="/addCenter" element ={  <AddCenter/>}/>
         <Route path="/center/:id" element ={<SingleCenter/>}/>
         
       </Routes>

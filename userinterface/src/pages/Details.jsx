@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Navbar from '../component/Navbar'
 import "./../global.css"
-import {  ArrowLeftOutlined, Delete } from '@mui/icons-material'
+import { ArrowLeftOutlined, Delete } from '@mui/icons-material'
 import { Avatar } from '@mui/material'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
@@ -94,59 +94,105 @@ cursor: pointer;
 
 
 const Details = () => {
-  const location = useLocation();
-  const [data, setData] = useState("")
+const navigate = useNavigate();
+const [centerName, setCenterName] = useState("")
+const location = useLocation();
 
+  const [user, setUser] = useState(location.state.user)
+
+
+  const findCenterName = async () => {
+    try {
+      const centerId = user.centerId;
+
+      const center = await publicRequest.get(`/center/${centerId}`);
+     
+      const {name , ...other } =center._doc;
+      setCenterName(name);
+      console.log(centerName)
+    } catch (error) {
+    }
+  }
+
+  useEffect(() => {
+    findCenterName();
+  }, [user])
   
+
+  // handle delete Click 
+  const hancleClick =async ()=>{
+
+    try {
+      var result = window.confirm("Do you want to proceed?");
+      if(result)
+      {
+
+        const res = await publicRequest.delete(`/recipient/${user._id}`);
+        console.log(res);
+        alert("deleted sunccessFully")
+        navigate("/");
+      }
+      
+    } catch (error) {
+      alert(error.message)
+
+    }
+
+  }
+
+
   return (
     <Container>
       <Navbar balnk={true} />
-      <ContainerWrapper>
-        <Upper>
-          <Avatar></Avatar>
-          <Name>Kunal</Name>
-        </Upper>
-        <Items>
-          <Item>
-            <Title style={{ "color": "red" }}>Ref ID</Title>
-            <Value>64a804f7f5fa91718892e95d</Value>
-          </Item>
-          <Item>
-            <Title style={{ "color": "red" }}>Secret Code</Title>
-            <Value>2e95d</Value>
-          </Item>
-          <Item>
-            <Title style={{ "color": "green" }}>aadhar ID</Title>
-            <Value>123893093243</Value>
-          </Item>
-          <Item>
-            <Title>Year of Birth:</Title>
-            <Value>2001</Value>
-          </Item>
-        </Items>
-        <Items less>
-          <Info>Center:Vivekananda school</Info>
-          <Info>Dose1</Info>
-          <Info>covaxin</Info>
-          <Info>Free</Info>
-        </Items>
-        <Lower>
-        <Stack direction="row" spacing={2} padding={2}>
-      <Button variant="contained"  sx={{ backgroundColor: "#fca61f" }} startIcon={<DeleteIcon />}>
-        Delete
-      </Button>
-      <Button variant="contained" sx={{ backgroundColor: "#fca61f" }} endIcon={<SendIcon />}>
-        EDIT
-      </Button>
-    </Stack>
-        </Lower>
-      </ContainerWrapper>
-      <LowerPart>
-        <Link to="/schedule">
-          <Buttonback> <ArrowLeftOutlined />Back</Buttonback>
-        </Link>
-      </LowerPart>
 
+      {
+        user && <><ContainerWrapper>
+          <Upper>
+            <Avatar></Avatar>
+            <Name>{user.name}</Name>
+          </Upper>
+          <Items>
+            <Item>
+              <Title style={{ "color": "red" }}>Ref ID</Title>
+              <Value>{user._id}</Value>
+            </Item>
+            <Item>
+              <Title style={{ "color": "red" }}>Secret Code</Title>
+              <Value>{user._id.slice(-6)}</Value>
+            </Item>
+            <Item>
+              <Title style={{ "color": "green" }}>aadhar ID</Title>
+              <Value>{user.aadhar}</Value>
+            </Item>
+            <Item>
+              <Title>Year of Birth:</Title>
+              <Value>{user.Dob}</Value>
+            </Item>
+          </Items>
+          <Items less>
+            <Info>{`center:${centerName}`}</Info>
+            <Info>{user.DoseNo}</Info>
+            <Info>{user.vaccine}</Info>
+            <Info>{user.cost}</Info>
+          </Items>
+          <Lower>
+            <Stack direction="row" spacing={2} padding={2}>
+              <Button onClick={hancleClick} variant="contained" sx={{ backgroundColor: "#fca61f" }} startIcon={<DeleteIcon />}>
+                Delete
+              </Button>
+              <Button variant="contained" sx={{ backgroundColor: "#fca61f" }} endIcon={<SendIcon />}>
+                EDIT
+              </Button>
+            </Stack>
+          </Lower>
+        </ContainerWrapper>
+          <LowerPart>
+            <Link to="/schedule">
+              <Buttonback> <ArrowLeftOutlined />Back</Buttonback>
+            </Link>
+          </LowerPart></>
+
+      }
     </Container>
   )
 }

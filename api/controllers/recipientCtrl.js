@@ -49,15 +49,25 @@ export const getRecipient= async(req,res,next)=>{
 
 export const getAllRecipient= async(req,res,next)=>{
     try {
-        const data = await Recipient.find();
-        res.status(200).json(data);
+        if(req.query!= null)
+        {
+            const data = await Recipient.find(req.query);
+            console.log("vcalling getAllRecipient with query")
+            res.status(200).json(data);
 
-    
+        }
+        else{
+            const data = await Recipient.find();
+            res.status(200).json(data);
+        }
+        
     } catch (error) {
         next(error)
         
     }
 }
+
+// check the user exist with that dost and addhar no
 
 
 

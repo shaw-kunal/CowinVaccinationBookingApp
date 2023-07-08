@@ -159,8 +159,6 @@ const Login = () => {
     const handleClick = (e) => {
         e.preventDefault();
         login(dispatch, { username, password })
-
-
     }
     return (
 

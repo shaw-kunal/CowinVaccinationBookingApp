@@ -4,8 +4,17 @@ import "./ASideBar.scss"
 import { Link } from 'react-router-dom'
 import VaccinesIcon from '@mui/icons-material/Vaccines';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../redux/userRedux';
 
 const ASideBar = () => {
+
+    const dispatch = useDispatch();
+  const handleLogout = (e) => {
+    dispatch(logout());
+  }
+
+
     return (
         <div className='sidebar'>
             <div className="top">
@@ -18,10 +27,10 @@ const ASideBar = () => {
                     <Link to="/" className='link'> <li><Dashboard className='icon' /><span>dashboard</span></li>
                     </Link>
 
-                    <Link to="/users" className='link'><li><AccountCircle className='icon' /><span>Recipients</span></li>
+                    <Link to="/recipients" className='link'><li><AccountCircle className='icon' /><span>Recipients</span></li>
                     </Link>
 
-                    <Link to="/product" className='link'>
+                    <Link to="/addCenter" className='link'>
                         <li><LibraryAddIcon className='icon' /><span>Add vaccine Centers</span></li>
                     </Link>
                     <Link to="/product" className='link'>
@@ -38,7 +47,11 @@ const ASideBar = () => {
                     <p className="title">USER</p>
 
                     <li><AccountBoxOutlined className='icon' /><span>Profile</span></li>
-                    <li><ExitToAppOutlined className='icon' /><span>Logout</span></li>
+                    <li>
+                    <Link className="link" to="/login" onClick={handleLogout}>
+                    <ExitToAppOutlined className='icon' />
+                    <span>Logout</span></Link>
+                    </li>
                 </ul>
             </div>
             <hr />

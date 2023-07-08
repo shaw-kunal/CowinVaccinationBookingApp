@@ -5,11 +5,11 @@ const router = express.Router();
 
 
 // update user
-router.put("/:id",verifyUser,updateUser);
+router.put("/:id",updateUser);
 // delete user 
-router.delete("/:id",verifyUser,deleteUser);
+router.delete("/:id",deleteUser);
 // get single user
-router.get("/:id",verifyUser,getUser);
+router.get("/:id",getUser);
 // get all user
 router.get("/",getAlleUser);
 

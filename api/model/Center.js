@@ -18,24 +18,21 @@ const CenterSchema = new mongoose.Schema({
     },
     cost:{
         type:String,
-        
+        default:"Free"
     },
    capacity:{
     type: Number,
     required: true
    },
-   availableDate:[
-    {  availableCapacity:{
-            type:Number,
-            default: function() {
-                return ` ${this.capacity}`;
-              }
-        }, 
-        DateAvl:{
-            type:Date
+
+     unavailable:[
+        {
+        date:{type:Date},
+        count:{type:Number}
         }
-    }
-   ],
+     ]
+     ,
+
     price:{
         type:Number,
         required:true

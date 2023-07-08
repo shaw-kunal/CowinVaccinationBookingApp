@@ -7,7 +7,6 @@ export const  login = async (dispatch,user)=>{
         const res = await publicRequest.post("/auth/login",user);
         dispatch(loginSucess(res.data))
         localStorage.setItem("token",res.data.token);
-        alert("successfully login");
 
     } catch (error) {
         dispatch(loginFailure())   

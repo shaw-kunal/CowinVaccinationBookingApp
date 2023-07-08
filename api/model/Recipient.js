@@ -32,6 +32,13 @@ const RecipientSchema = new mongoose.Schema({
     },
     CenterId:{
         type:String
+    },
+    cost:{
+        type:String
+    }
+    ,
+    DateOfVaccination:{
+        type:Date
 
     }
 },
